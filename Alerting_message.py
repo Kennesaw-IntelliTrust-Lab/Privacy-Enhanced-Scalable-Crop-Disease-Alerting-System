@@ -4,14 +4,18 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import numpy as np
 from dotenv import load_dotenv
-import os
-import openai
+import matplotlib.pyplot as plt
 
 # Load environment variables from .env file
 load_dotenv()
+print(f"Current working directory: {os.getcwd()}")
+
+# Print the API key to debug
+api_key = os.getenv("OPENAI_API_KEY")
+print(f"API Key: {api_key}")
 
 # Access the OpenAI API key from the .env file
-openai.api_key = os.getenv("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")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Check if the API key was loaded correctly
 if not openai.api_key:
@@ -26,8 +30,8 @@ def predict_disease(img_path):
     img_array = img_to_array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
 
-    predictions = model.predict(img_array)ls
-
+    predictions = model.predict(img_array)
+    
     class_names = ['RiceBlast', 'BrownSpot', 'BacterialLeafBlight']
     predicted_class = class_names[np.argmax(predictions)]
 
@@ -39,7 +43,6 @@ def predict_disease(img_path):
 
     return predicted_class
 
-# Function to query OpenAI API for answers (using newer API format)
 # Function to query OpenAI API for answers (using newer API format)
 def ask_openai(question):
     response = openai.ChatCompletion.create(  # Correct method: ChatCompletion.create
